@@ -32,15 +32,38 @@ import com.vaadin.flow.i18n.LocaleChangeEvent;
 import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
+import pk.demo.roshambo.model.Handsign;
+import pk.demo.roshambo.model.Stroke;
+import pk.demo.roshambo.service.GameSession;
 
 @Route
 public class MainView extends VerticalLayout {
 
 
-    public MainView() {
+    public MainView(GameSession gameSession) {
+
         H1 heading = new H1("Roshambo demo");
-        
-        add(heading);
+
+        Grid<Stroke> grid = new Grid<>(Stroke.class);
+
+        Button buttonRock = new Button("Rock",
+                event -> { gameSession.newStroke(Handsign.ROCK);
+                    grid.setItems(gameSession.getStrokes());
+        });
+
+        Button buttonPaper = new Button("Paper",
+                event -> { gameSession.newStroke(Handsign.PAPER);
+                    grid.setItems(gameSession.getStrokes());
+        });
+
+        Button buttonScissors = new Button("Scissors",
+                event -> { gameSession.newStroke(Handsign.SCISSORS);
+                    grid.setItems(gameSession.getStrokes());
+        });
+
+        add(heading, buttonRock, buttonPaper, buttonScissors, grid);
+
+
     }
 
 }
