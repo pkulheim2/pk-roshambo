@@ -3,7 +3,7 @@ package pk.demo.roshambo.service;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import pk.demo.roshambo.model.Handsign;
-import pk.demo.roshambo.model.Stroke;
+import pk.demo.roshambo.model.Round;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,31 +12,38 @@ import java.util.UUID;
 
 @SpringComponent
 @UIScope
-public class GameSession {
+public class GameSession implements IGameSession {
 
 	private String uid = UUID.randomUUID().toString();
-	private GameEngine gameEngine;
+	private IGameEngine gameEngine;
 
-	List<Stroke> strokes = new ArrayList<>();
+	List<Round> strokes = new ArrayList<>();
 
-	public GameSession(GameEngine gameEngine) {
+	public GameSession(IGameEngine gameEngine) {
 		this.gameEngine = gameEngine;
 	}
 
-	public void newStroke(Handsign playerOne, Handsign playerTwo) {
-		Stroke stroke = new Stroke(uid, new Date(), playerOne, playerTwo);
-		gameEngine.evaluateStroke(stroke);
+	@Override public List<Round> newStroke(Handsign playerOne, Handsign playerTwo) {
+		Round stroke = new Round(uid, new Date(), playerOne, playerTwo);
+		stroke.setResult(gameEngine.postRound(stroke));
 		strokes.add(stroke);
+		return strokes;
 	}
 
-	public void newStroke(Handsign playerTwo) {
+	@Override public List<Round> newStroke(Handsign playerTwo) {
 		Handsign playerOne = gameEngine.getRandomSign();
-		Stroke stroke = new Stroke(uid, new Date(), playerOne, playerTwo);
-		gameEngine.evaluateStroke(stroke);
+		Round stroke = new Round(uid, new Date(), playerOne, playerTwo);
+		stroke.setResult(gameEngine.postRound(stroke));
 		strokes.add(stroke);
+		return strokes;
 	}
 
-	public List<Stroke> getStrokes() {
+	@Override public List<Round> getStrokes() {
+		return strokes;
+	}
+
+	@Override public List<Round> resetSession() {
+		strokes = new ArrayList<>();
 		return strokes;
 	}
 }

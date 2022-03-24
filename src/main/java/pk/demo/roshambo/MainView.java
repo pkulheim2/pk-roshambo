@@ -15,53 +15,57 @@
  */
 package pk.demo.roshambo;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
-
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.dom.Style;
-import com.vaadin.flow.i18n.LocaleChangeEvent;
-import com.vaadin.flow.i18n.LocaleChangeObserver;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouterLink;
 import pk.demo.roshambo.model.Handsign;
-import pk.demo.roshambo.model.Stroke;
-import pk.demo.roshambo.service.GameSession;
+import pk.demo.roshambo.model.Round;
+import pk.demo.roshambo.service.IGameSession;
 
 @Route
 public class MainView extends VerticalLayout {
 
 
-    public MainView(GameSession gameSession) {
+    public MainView(@Autowired IGameSession gameSessionService) {
 
+        HorizontalLayout container = new HorizontalLayout();
         H1 heading = new H1("Roshambo demo");
+        Image image = new Image("images/Rock-paper-scissors.svg.png", "Alternative image text");
+        container.add(heading, image);
 
-        Grid<Stroke> grid = new Grid<>(Stroke.class);
+
+        HorizontalLayout container2 = new HorizontalLayout();
+
+        Grid<Round> grid = new Grid<>(Round.class);
+        grid.setColumns("playerOne","playerTwo","result");
 
         Button buttonRock = new Button("Rock",
-                event -> { gameSession.newStroke(Handsign.ROCK);
-                    grid.setItems(gameSession.getStrokes());
-        });
+                event -> grid.setItems(gameSessionService.newStroke(Handsign.ROCK))
+        );
 
         Button buttonPaper = new Button("Paper",
-                event -> { gameSession.newStroke(Handsign.PAPER);
-                    grid.setItems(gameSession.getStrokes());
-        });
+                event -> grid.setItems(gameSessionService.newStroke(Handsign.PAPER))
+        );
 
         Button buttonScissors = new Button("Scissors",
-                event -> { gameSession.newStroke(Handsign.SCISSORS);
-                    grid.setItems(gameSession.getStrokes());
-        });
+                event -> grid.setItems(gameSessionService.newStroke(Handsign.SCISSORS))
 
-        add(heading, buttonRock, buttonPaper, buttonScissors, grid);
+        );
+
+        Button resetSession = new Button("Reset",
+                event -> grid.setItems(gameSessionService.resetSession())
+
+        );
+        container2.add(buttonRock, buttonPaper, buttonScissors, resetSession);
+
+
+        add(container,container2 , grid);
 
 
     }
