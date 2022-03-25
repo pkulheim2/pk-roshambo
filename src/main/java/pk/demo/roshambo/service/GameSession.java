@@ -17,33 +17,33 @@ public class GameSession implements IGameSession {
 	private String uid = UUID.randomUUID().toString();
 	private IGameEngine gameEngine;
 
-	List<Round> strokes = new ArrayList<>();
+	List<Round> rounds = new ArrayList<>();
 
 	public GameSession(IGameEngine gameEngine) {
 		this.gameEngine = gameEngine;
 	}
 
-	@Override public List<Round> newStroke(Handsign playerOne, Handsign playerTwo) {
+	@Override public List<Round> newRound(Handsign playerOne, Handsign playerTwo) {
 		Round stroke = new Round(uid, new Date(), playerOne, playerTwo);
 		stroke.setResult(gameEngine.postRound(stroke));
-		strokes.add(stroke);
-		return strokes;
+		rounds.add(stroke);
+		return rounds;
 	}
 
-	@Override public List<Round> newStroke(Handsign playerTwo) {
+	@Override public List<Round> newRound(Handsign playerTwo) {
 		Handsign playerOne = gameEngine.getRandomSign();
 		Round stroke = new Round(uid, new Date(), playerOne, playerTwo);
 		stroke.setResult(gameEngine.postRound(stroke));
-		strokes.add(stroke);
-		return strokes;
+		rounds.add(stroke);
+		return rounds;
 	}
 
-	@Override public List<Round> getStrokes() {
-		return strokes;
+	@Override public List<Round> getRounds() {
+		return rounds;
 	}
 
 	@Override public List<Round> resetSession() {
-		strokes = new ArrayList<>();
-		return strokes;
+		rounds = new ArrayList<>();
+		return rounds;
 	}
 }

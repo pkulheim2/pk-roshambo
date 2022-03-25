@@ -23,52 +23,49 @@ class RoshamboEngineTests {
 	private IGameEngine gameEngine;
 
 	@Test
-	void testStrokeEvaluation_rock_paper() {
-		RoundResult strokeResult = gameEngine.evaluateRound(Handsign.ROCK, Handsign.PAPER);
-		assertEquals(WIN_TWO, strokeResult);
+	void testroundEvaluation_rock_paper() {
+		RoundResult roundResult = gameEngine.evaluateRound(Handsign.ROCK, Handsign.PAPER);
+		assertEquals(WIN_TWO, roundResult);
 	}
 
 	@Test
-	void testStrokeEvaluation_rock_scissors() {
-		RoundResult strokeResult = gameEngine.evaluateRound(Handsign.ROCK, Handsign.SCISSORS);
-		assertEquals(WIN_ONE, strokeResult);
+	void testroundEvaluation_rock_scissors() {
+		RoundResult roundResult = gameEngine.evaluateRound(Handsign.ROCK, Handsign.SCISSORS);
+		assertEquals(WIN_ONE, roundResult);
 	}
 
 	@Test
-	void testStrokeEvaluation_paper_scissors() {
-		RoundResult strokeResult = gameEngine.evaluateRound(Handsign.PAPER, Handsign.SCISSORS);
-		assertEquals(WIN_TWO, strokeResult);
+	void testroundEvaluation_paper_scissors() {
+		RoundResult roundResult = gameEngine.evaluateRound(Handsign.PAPER, Handsign.SCISSORS);
+		assertEquals(WIN_TWO, roundResult);
 	}
 
 	@Test
-	void testStrokeEvaluation_paper_rock() {
-		RoundResult strokeResult = gameEngine.evaluateRound(Handsign.PAPER, Handsign.ROCK);
-		assertEquals(WIN_ONE, strokeResult);
+	void testroundEvaluation_paper_rock() {
+		RoundResult roundResult = gameEngine.evaluateRound(Handsign.PAPER, Handsign.ROCK);
+		assertEquals(WIN_ONE, roundResult);
 	}
 
 	@Test
-	void testStrokeEvaluation_rock_rock() {
-		RoundResult strokeResult = gameEngine.evaluateRound(Handsign.ROCK, Handsign.ROCK);
-		assertEquals(DRAW, strokeResult);
+	void testroundEvaluation_rock_rock() {
+		RoundResult roundResult = gameEngine.evaluateRound(Handsign.ROCK, Handsign.ROCK);
+		assertEquals(DRAW, roundResult);
 	}
 
 	@Test
 	void testSummary() {
 		gameEngine.resetEngine();
-		Round stroke1 = new Round("uid1", null, Handsign.ROCK, Handsign.ROCK);
-		Round stroke2 = new Round("uid2", null, Handsign.PAPER, Handsign.SCISSORS);
-		Round stroke3 = new Round("uid3", null, Handsign.SCISSORS, Handsign.ROCK);
-		gameEngine.postRound(stroke1);
-
-		gameEngine.postRound(stroke2);
-		gameEngine.postRound(stroke3);
+		Round round1 = new Round("uid1", null, Handsign.ROCK, Handsign.ROCK);
+		Round round2 = new Round("uid2", null, Handsign.PAPER, Handsign.SCISSORS);
+		Round round3 = new Round("uid3", null, Handsign.SCISSORS, Handsign.ROCK);
+		gameEngine.postRound(round1);
+		gameEngine.postRound(round2);
+		gameEngine.postRound(round3);
 		Summary summary = gameEngine.getSummary();
 		assertEquals(3, summary.getRoundsTotal());
 		assertEquals(1, summary.getDraws());
 		assertEquals(0, summary.getWinsPlayerOne());
 		assertEquals(2, summary.getWinsPlayerTwo());
-
-
 	}
 
 	@Test
@@ -78,11 +75,11 @@ class RoshamboEngineTests {
 
 		GameSession gameSession2 = new GameSession(gameEngine);
 
-		List<Round> strokes = gameSession.newStroke(Handsign.ROCK, Handsign.PAPER);
+		List<Round> rounds = gameSession.newRound(Handsign.ROCK, Handsign.PAPER);
 
-		List<Round> strokes2 = gameSession2.newStroke(Handsign.ROCK, Handsign.PAPER);
-		assertEquals(1, strokes.size());
-		assertEquals(1, strokes2.size());;
+		List<Round> rounds2 = gameSession2.newRound(Handsign.ROCK, Handsign.PAPER);
+		assertEquals(1, rounds.size());
+		assertEquals(1, rounds2.size());;
 
 		Summary summary = gameEngine.getSummary();
 		assertEquals(2, summary.getRoundsTotal());
@@ -94,11 +91,11 @@ class RoshamboEngineTests {
 		gameEngine.resetEngine();
 		GameSession gameSession = new GameSession(gameEngine);
 
-		List<Round> strokes = gameSession.newStroke(Handsign.ROCK, Handsign.PAPER);
-		assertEquals(1, strokes.size());
+		List<Round> rounds = gameSession.newRound(Handsign.ROCK, Handsign.PAPER);
+		assertEquals(1, rounds.size());
 		gameSession.resetSession();
-		List<Round> strokes2 = gameSession.getStrokes();
-		assertEquals(0, strokes2.size());
+		List<Round> rounds2 = gameSession.getRounds();
+		assertEquals(0, rounds2.size());
 
 		Summary summary = gameEngine.getSummary();
 		assertEquals(1, summary.getRoundsTotal());

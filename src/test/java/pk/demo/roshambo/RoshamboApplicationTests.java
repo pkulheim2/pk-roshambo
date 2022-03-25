@@ -10,6 +10,7 @@ import pk.demo.roshambo.model.Round;
 import pk.demo.roshambo.model.RoundResult;
 import pk.demo.roshambo.service.GameSession;
 import pk.demo.roshambo.service.IGameEngine;
+import pk.demo.roshambo.service.IGameSession;
 
 import java.util.List;
 
@@ -26,13 +27,30 @@ class RoshamboApplicationTests {
 
 
 	@Test
-	void testStroke() {
+	void testRoundBothSignsProvided() {
 
 		when(gameEngineMock.postRound(any())).thenReturn(RoundResult.DRAW);
-		GameSession gameSession = new GameSession(gameEngineMock);
+		IGameSession gameSession = new GameSession(gameEngineMock);
 
-		gameSession.newStroke(Handsign.ROCK, Handsign.PAPER);
-		List<Round> strokes = gameSession.newStroke(Handsign.PAPER, Handsign.ROCK);
+		gameSession.newRound(Handsign.ROCK, Handsign.PAPER);
+		List<Round> strokes = gameSession.newRound(Handsign.PAPER, Handsign.ROCK);
+
+		assertEquals(2, strokes.size());
+
+		assertEquals(RoundResult.DRAW, strokes.get(0).getResult());
+
+	}
+
+	@Test
+	void testRoundOneSignsProvided() {
+
+		when(gameEngineMock.postRound(any())).thenReturn(RoundResult.DRAW);
+
+		when(gameEngineMock.getRandomSign()).thenReturn(Handsign.ROCK);
+		IGameSession gameSession = new GameSession(gameEngineMock);
+
+		gameSession.newRound(Handsign.PAPER);
+		List<Round> strokes = gameSession.newRound(Handsign.ROCK);
 
 		assertEquals(2, strokes.size());
 

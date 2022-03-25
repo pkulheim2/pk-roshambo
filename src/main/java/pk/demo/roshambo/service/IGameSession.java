@@ -7,11 +7,30 @@ import java.util.List;
 
 public interface IGameSession {
 
-	List<Round> newStroke(Handsign playerOne, Handsign playerTwo);
+	/**
+	 * Process a new round, signs from both players needs to be provided
+	 * @param playerOne
+	 * @param playerTwo
+	 * @return actual list of Rounds
+	 */
+	List<Round> newRound(Handsign playerOne, Handsign playerTwo);
 
-	List<Round> newStroke(Handsign playerTwo);
+	/**
+	 * Process a new round, signs from player two needs to be provided, for player one a random one is generated
+	 * @param playerTwo
+	 * @return actual list of Rounds
+	 */
+	List<Round> newRound(Handsign playerTwo);
 
-	List<Round> getStrokes();
+	/**
+	 * Returns actual list of Rounds
+	 * @return
+	 */
+	List<Round> getRounds();
 
+	/**
+	 * Resets session
+	 * @return
+	 */
 	List<Round> resetSession();
 }

@@ -12,7 +12,7 @@ import java.util.*;
 public class GameEngine implements IGameEngine {
 
 	private final Random rand = new Random();
-	private Map<String, List<Round>> globalStrokes = new HashMap<>();
+	private Map<String, List<Round>> globalRounds = new HashMap<>();
 
 
 	@Override public Handsign getRandomSign() {
@@ -27,20 +27,20 @@ public class GameEngine implements IGameEngine {
 	}
 
 	@Override public void resetEngine() {
-		globalStrokes = new HashMap<>();
+		globalRounds = new HashMap<>();
 	}
 
-	@Override public RoundResult postRound(Round stroke) {
-		RoundResult roundResult = evaluateRound(stroke.getPlayerOne(), stroke.getPlayerTwo());
-		stroke.setResult(roundResult);
+	@Override public RoundResult postRound(Round round) {
+		RoundResult roundResult = evaluateRound(round.getPlayerOne(), round.getPlayerTwo());
+		round.setResult(roundResult);
 
 		//store round for the summary
-		if (globalStrokes.containsKey(stroke.getUid())) {
-			globalStrokes.get(stroke.getUid()).add(stroke);
+		if (globalRounds.containsKey(round.getUid())) {
+			globalRounds.get(round.getUid()).add(round);
 		} else {
-			List<Round> strokes = new ArrayList();
-			strokes.add(stroke);
-			globalStrokes.put(stroke.getUid(), strokes);
+			List<Round> strokes = new ArrayList<>();
+			strokes.add(round);
+			globalRounds.put(round.getUid(), strokes);
 		}
 		return roundResult;
 	}
@@ -62,12 +62,12 @@ public class GameEngine implements IGameEngine {
 
 	@Override public Summary getSummary() {
 		Summary summary = new Summary();
-		globalStrokes.entrySet().forEach(e -> summary.addRoundsTotal(e.getValue().size()));
-		globalStrokes.entrySet().forEach(e -> summary.addWinsPlayerOne(e.getValue().stream().filter(ee -> ee.getResult().equals(
+		globalRounds.entrySet().forEach(e -> summary.addRoundsTotal(e.getValue().size()));
+		globalRounds.entrySet().forEach(e -> summary.addWinsPlayerOne(e.getValue().stream().filter(ee -> ee.getResult().equals(
 				RoundResult.WIN_ONE)).count()));
-		globalStrokes.entrySet().forEach(e -> summary.addWinsPlayerTwo(e.getValue().stream().filter(ee -> ee.getResult().equals(
+		globalRounds.entrySet().forEach(e -> summary.addWinsPlayerTwo(e.getValue().stream().filter(ee -> ee.getResult().equals(
 				RoundResult.WIN_TWO)).count()));
-		globalStrokes.entrySet().forEach(e -> summary.addDraws(e.getValue().stream().filter(ee -> ee.getResult().equals(
+		globalRounds.entrySet().forEach(e -> summary.addDraws(e.getValue().stream().filter(ee -> ee.getResult().equals(
 				RoundResult.DRAW)).count()));
 		return summary;
 	}

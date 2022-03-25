@@ -17,8 +17,8 @@ package pk.demo.roshambo;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -37,17 +37,19 @@ public class SummaryView extends VerticalLayout {
         HorizontalLayout containerHead = new HorizontalLayout();
         H2 heading = new H2("Roshambo for Alot  v 0.1");
         Image image = new Image("images/Rock-paper-scissors.small.png", "Rock-paper-scissors");
-        containerHead.add(heading, image);
+        containerHead.add(image, heading);
+
+        H3 tableTitle = new H3("Summary from all game sessions:");
 
         Grid<Summary> grid = new Grid<>(Summary.class);
+        grid.setColumns("roundsTotal","winsPlayerOne","winsPlayerTwo","draws");
         grid.setItems(List.of(gameEngine.getSummary()));
 
         Button refresh = new Button("Refresh",
                 event -> grid.setItems(List.of(gameEngine.getSummary()))
-
         );
 
-        add(heading, refresh, image, grid);
+        add(containerHead, refresh, tableTitle, grid);
     }
 
 }

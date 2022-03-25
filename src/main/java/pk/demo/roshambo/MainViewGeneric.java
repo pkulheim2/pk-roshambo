@@ -26,6 +26,9 @@ import pk.demo.roshambo.model.Handsign;
 import pk.demo.roshambo.model.Round;
 import pk.demo.roshambo.service.IGameSession;
 
+/**
+ * Draft view with all signs throwing possible
+ */
 @Route("generic")
 public class MainViewGeneric extends VerticalLayout {
 
@@ -44,15 +47,15 @@ public class MainViewGeneric extends VerticalLayout {
         grid.setColumns("playerOne","playerTwo","result");
 
         Button buttonRock = new Button("Rock",
-                event -> grid.setItems(gameSessionService.newStroke(Handsign.ROCK))
+                event -> grid.setItems(gameSessionService.newRound(Handsign.ROCK))
         );
 
         Button buttonPaper = new Button("Paper",
-                event -> grid.setItems(gameSessionService.newStroke(Handsign.PAPER))
+                event -> grid.setItems(gameSessionService.newRound(Handsign.PAPER))
         );
 
         Button buttonScissors = new Button("Scissors",
-                event -> grid.setItems(gameSessionService.newStroke(Handsign.SCISSORS))
+                event -> grid.setItems(gameSessionService.newRound(Handsign.SCISSORS))
 
         );
 
@@ -62,9 +65,7 @@ public class MainViewGeneric extends VerticalLayout {
         );
         container2.add(buttonRock, buttonPaper, buttonScissors, resetSession);
 
-
         add(container,container2 , grid);
-
 
     }
 

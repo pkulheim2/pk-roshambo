@@ -36,7 +36,7 @@ public interface IGameEngine {
 	RoundResult evaluateRound(Handsign playerOne, Handsign playerTwo);
 
 	/**
-	 * Provides global summary of plays from all game sessions
+	 * Provides global summary of rounds from all game sessions
 	 * @return
 	 */
 	Summary getSummary();
