@@ -1,4 +1,4 @@
-/*
+package pk.demo.roshambo;/*
  * Copyright 2000-2017 Vaadin Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -13,51 +13,57 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package pk.demo.roshambo;
-
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import org.springframework.beans.factory.annotation.Autowired;
 import pk.demo.roshambo.model.Handsign;
 import pk.demo.roshambo.model.Round;
 import pk.demo.roshambo.service.IGameSession;
 
-@Route
-public class MainView extends VerticalLayout {
+@Route("generic")
+public class MainViewGeneric extends VerticalLayout {
 
 
-    public MainView(@Autowired IGameSession gameSessionService) {
+    public MainViewGeneric(@Autowired IGameSession gameSessionService) {
 
-        HorizontalLayout containerHead = new HorizontalLayout();
-        H2 heading = new H2("Roshambo for Alot  v 0.1");
-        Image image = new Image("images/Rock-paper-scissors.small.png", "Rock-paper-scissors");
-        containerHead.add(heading, image);
+        HorizontalLayout container = new HorizontalLayout();
+        H1 heading = new H1("Roshambo demo");
+        Image image = new Image("images/Rock-paper-scissors.svg.png", "Alternative image text");
+        container.add(heading, image);
 
 
-        HorizontalLayout containerButtons = new HorizontalLayout();
+        HorizontalLayout container2 = new HorizontalLayout();
 
         Grid<Round> grid = new Grid<>(Round.class);
         grid.setColumns("playerOne","playerTwo","result");
 
-        Button buttonRock = new Button("Round",
+        Button buttonRock = new Button("Rock",
                 event -> grid.setItems(gameSessionService.newStroke(Handsign.ROCK))
+        );
+
+        Button buttonPaper = new Button("Paper",
+                event -> grid.setItems(gameSessionService.newStroke(Handsign.PAPER))
+        );
+
+        Button buttonScissors = new Button("Scissors",
+                event -> grid.setItems(gameSessionService.newStroke(Handsign.SCISSORS))
+
         );
 
         Button resetSession = new Button("Reset",
                 event -> grid.setItems(gameSessionService.resetSession())
 
         );
-        containerButtons.add(buttonRock, resetSession);
+        container2.add(buttonRock, buttonPaper, buttonScissors, resetSession);
 
 
-        add(containerHead,containerButtons , grid);
+        add(container,container2 , grid);
 
 
     }

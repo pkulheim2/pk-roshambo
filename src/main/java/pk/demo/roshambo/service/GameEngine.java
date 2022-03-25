@@ -45,7 +45,7 @@ public class GameEngine implements IGameEngine {
 		return roundResult;
 	}
 
-	// this mathod may be static
+	// this method may be static
 	@Override public RoundResult evaluateRound(Handsign playerOne, Handsign playerTwo) {
 		if (playerOne.equals(playerTwo)) {
 			return RoundResult.DRAW;
